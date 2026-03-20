@@ -1,9 +1,6 @@
 name: Build and Push OCI Artifact (Snapshot)
 
 on:
-  push:
-    branches:
-      - snapshot
   repository_dispatch:
     types:
       - snapshot-updated
@@ -23,7 +20,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          ref: snapshot
           fetch-depth: 0
+
+      - name: Checkout GitHub Actions from main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          sparse-checkout: |
+            .github/actions
+          sparse-checkout-cone-mode: false
+          path: _github_main
+          fetch-depth: 1
+
+      - name: Copy actions to workspace
+        run: cp -r _github_main/.github/actions .github/actions
 
       - name: Find manifest
         id: find-manifest
