@@ -34,7 +34,9 @@ jobs:
           fetch-depth: 1
 
       - name: Copy actions to workspace
-        run: cp -r _github_main/.github/actions .github/actions
+        run: |
+          mkdir -p .github/actions
+          cp -r _github_main/.github/actions .github/actions
 
       - name: Find manifest
         id: find-manifest
